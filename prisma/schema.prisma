@@ -13,7 +13,7 @@ model Admin {
 }
 
 model Student {
-  id          String       @id
+  id          String       @id @default(uuid())
   username    String       @unique
   name        String
   surname     String
@@ -36,7 +36,7 @@ model Student {
 }
 
 model Teacher {
-  id        String    @id
+  id        String    @id @default(uuid())
   username  String    @unique
   name      String
   surname   String
@@ -54,7 +54,7 @@ model Teacher {
 }
 
 model Parent {
-  id        String    @id
+  id        String    @id @default(uuid())
   username  String    @unique
   name      String
   surname   String
@@ -70,7 +70,7 @@ model Grade {
   level Int @unique
 
   students Student[]
-  classess Class[]
+  classes Class[]
 }
 
 model Class {
