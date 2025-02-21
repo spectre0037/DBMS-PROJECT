@@ -65,7 +65,7 @@ const renderRow = (item: TeacherList) => (
       </div>
     </td>
     <td className="hidden md:table-cell">{item.username}</td>
-    <td className="hidden md:table-cell">{item.su.join(",")}</td>
+    <td className="hidden md:table-cell">{item.subjects.join(",")}</td>
     <td className="hidden md:table-cell">{item.classes.join(",")}</td>
     <td className="hidden md:table-cell">{item.phone}</td>
     <td className="hidden md:table-cell">{item.address}</td>
@@ -89,8 +89,13 @@ const renderRow = (item: TeacherList) => (
 
 const TeacherListPage = async () => {
 
-  const teacher = await prisma.teacher.findMany()
-  console.log(teacher)
+  const data = await prisma.teacher.findMany({
+    include: {
+      subjects: true,
+      classes: true
+    }
+  })
+  console.log(data)
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
@@ -115,7 +120,7 @@ const TeacherListPage = async () => {
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={teachersData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
       {/* PAGINATION */}
       <Pagination />
     </div>
