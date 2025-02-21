@@ -73,10 +73,10 @@ const ClassListPage = async ({
     for (const [key, value] of Object.entries(queryParams)) {
       if (value !== undefined) {
         switch (key) {
-          case "search":
+          case "supervisorId":
             query.supervisorId = value;
             break;
-          case "supervisorId":
+          case "search":
             query.name = { contains: value, mode: "insensitive" };
             break;
           default:
