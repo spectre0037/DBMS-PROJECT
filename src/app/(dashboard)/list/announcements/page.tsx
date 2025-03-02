@@ -4,12 +4,12 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { role } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import { Announcement, Class, Prisma } from "@prisma/client";
 import Image from "next/image";
 
-const { sessionClaims } = auth();
-const role = (sessionClaims?.metadata as {role?: string})?.role;
+
 type AnnouncementList = Announcement & { class: Class };
 
 const columns = [
@@ -26,10 +26,14 @@ const columns = [
     accessor: "date",
     className: "hidden md:table-cell",
   },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
+  ...(role === "admin"
+    ? [
+        {
+          header: "Actions",
+          accessor: "actions",
+        },
+      ]
+    : []),
 ];
 const renderRow = (item: AnnouncementList) => (
   <tr
