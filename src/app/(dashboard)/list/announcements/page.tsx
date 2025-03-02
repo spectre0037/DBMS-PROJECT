@@ -36,7 +36,9 @@ const renderRow = (item: AnnouncementList) => (
   >
     <td className="flex items-center gap-4 p-4">{item.title}</td>
     <td>{item.class?.name || "-"}</td>
-    <td className="hidden md:table-cell"> {new Intl.DateTimeFormat("en-US").format(item.date)}</td>
+    <td className="hidden md:table-cell">
+      {new Intl.DateTimeFormat("en-US").format(item.date)}
+    </td>
     <td>
       <div className="flex items-center gap-2">
         {role === "admin" && (
@@ -86,7 +88,6 @@ const AnnouncementListPage = async ({
     prisma.announcement.count({ where: query }),
   ]);
 
-
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
@@ -112,7 +113,7 @@ const AnnouncementListPage = async ({
       {/* LIST */}
       <Table columns={columns} renderRow={renderRow} data={data} />
       {/* PAGINATION */}
-      <Pagination page={p} count={count}/>
+      <Pagination page={p} count={count} />
     </div>
   );
 };
