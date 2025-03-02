@@ -98,6 +98,15 @@ const AssignmentListPage = async ({
       }
     }
   }
+
+  // ROLE CONSITIONS
+  switch (role) {
+    case "admin":
+      break;
+  
+    default:
+      break;
+  }
   const [data, count] = await prisma.$transaction([
     prisma.assignment.findMany({
       where: query,
