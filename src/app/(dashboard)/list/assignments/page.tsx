@@ -53,7 +53,7 @@ const renderRow = (item: AssignmentList) => (
     <td className="hidden md:table-cell"> {new Intl.DateTimeFormat("en-US").format(item.dueDate)}</td>
     <td>
       <div className="flex items-center gap-2">
-        {role === "admin" || role === "teacher" && (
+        {(role === "admin" || role === "teacher") && (
           <>
             <FormModal table="assignment" type="update" data={item} />
             <FormModal table="assignment" type="delete" id={item.id} />
