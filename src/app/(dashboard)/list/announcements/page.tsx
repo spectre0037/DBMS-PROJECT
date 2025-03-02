@@ -8,7 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 import { Announcement, Class, Prisma } from "@prisma/client";
 import Image from "next/image";
 
-const {sessionClaims} = auth();
+const { sessionClaims } = auth();
 const role = (sessionClaims?.metadata as {role?: string})?.role;
 type AnnouncementList = Announcement & { class: Class };
 
