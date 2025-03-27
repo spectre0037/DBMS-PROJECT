@@ -140,6 +140,5 @@ const AnnouncementListPage = async ({
 };
 
 
-
 export default AnnouncementListPage;
 
