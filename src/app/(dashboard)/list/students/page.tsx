@@ -2,14 +2,14 @@ import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { role, studentsData } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { role } from "@/lib/utils";
 import { Class, Prisma, Student } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
-type StudentList = Student & {class:Class}
+type StudentList = Student & { class: Class };
 
 const columns = [
   {
@@ -36,10 +36,14 @@ const columns = [
     accessor: "address",
     className: "hidden lg:table-cell",
   },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
+  ...(role === "admin"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : []),
 ];
 const renderRow = (item: StudentList) => (
   <tr
@@ -48,7 +52,7 @@ const renderRow = (item: StudentList) => (
   >
     <td className="flex items-center gap-4 p-4">
       <Image
-        src={item.img ||"/public/noAvatar.png"}
+        src={item.img || "/public/noAvatar.png"}
         alt=""
         width={40}
         height={40}
@@ -91,7 +95,7 @@ const StudentListPage = async ({
   const p = page ? parseInt(page) : 1;
   // URL PARAMS CONDITION
 
-  const query: Prisma.StudentWhereInput= {};
+  const query: Prisma.StudentWhereInput = {};
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
@@ -100,10 +104,10 @@ const StudentListPage = async ({
           case "teacherId":
             query.class = {
               lessons: {
-              some: {
-                teacherId: value
+                some: {
+                  teacherId: value,
+                },
               },
-            }
             };
             break;
           case "search":
@@ -152,7 +156,7 @@ const StudentListPage = async ({
       {/* LIST */}
       <Table columns={columns} renderRow={renderRow} data={data} />
       {/* PAGINATION */}
-      <Pagination page={p} count={count}/>
+      <Pagination page={p} count={count} />
     </div>
   );
 };

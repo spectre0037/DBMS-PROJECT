@@ -91,6 +91,7 @@ const ClassListPage = async ({
       }
     }
   }
+  
   const [data, count] = await prisma.$transaction([
     prisma.class.findMany({
       where: query,

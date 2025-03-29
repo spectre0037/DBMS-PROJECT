@@ -2,13 +2,13 @@ import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
-import { parentsData, role } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { role } from "@/lib/utils";
 import { Parent, Prisma, Student } from "@prisma/client";
 import Image from "next/image";
 
-type ParentList = Parent & { students: Student[] }; 
+type ParentList = Parent & { students: Student[] };
 const columns = [
   {
     header: "Info",
@@ -29,10 +29,14 @@ const columns = [
     accessor: "address",
     className: "hidden lg:table-cell",
   },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
+  ...(role === "admin"
+    ? [
+        {
+          header: "Actions",
+          accessor: "action",
+        },
+      ]
+    : []),
 ];
 
 const renderRow = (item: ParentList) => (
@@ -46,7 +50,9 @@ const renderRow = (item: ParentList) => (
         <p className="text-xs text-gray-500">{item?.email}</p>
       </div>
     </td>
-    <td className="hidden md:table-cell">{item.students.map(student=>student.name).join(",")}</td>
+    <td className="hidden md:table-cell">
+      {item.students.map((student) => student.name).join(",")}
+    </td>
     <td className="hidden md:table-cell">{item.phone}</td>
     <td className="hidden md:table-cell">{item.address}</td>
     <td>
@@ -61,7 +67,7 @@ const renderRow = (item: ParentList) => (
     </td>
   </tr>
 );
-const ParentListPage =  async ({
+const ParentListPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
@@ -71,7 +77,7 @@ const ParentListPage =  async ({
   const p = page ? parseInt(page) : 1;
   // URL PARAMS CONDITION
 
-  const query: Prisma.ParentWhereInput= {};
+  const query: Prisma.ParentWhereInput = {};
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
@@ -112,16 +118,14 @@ const ParentListPage =  async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
-              <FormModal table="teacher" type="create"/>
-            )}
+            {role === "admin" && <FormModal table="parent" type="create" />}
           </div>
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={parentsData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
       {/* PAGINATION */}
-      <Pagination page={p} count={count}/>
+      <Pagination page={p} count={count} />
     </div>
   );
 };
